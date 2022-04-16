@@ -14,4 +14,20 @@ client.on('ready', async () => {
 	console.log(`${client.user.tag} is Ready!`);
 });
 
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	if (interaction.commandName === 'set') {
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('primary')
+					.setLabel('')
+					.setStyle('PRIMARY'),
+			);
+
+		await interaction.reply({ content: '**Welcome to AskBOT !**', components: [row] });
+	}
+});
+
 client.login(config.token).catch(() => console.log('Invalid Token.Make Sure To Fill config.json'));
