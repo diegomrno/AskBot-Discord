@@ -1,0 +1,24 @@
+{
+  "name": "askbot-discord",
+  "version": "1.0.0",
+  "description": "A simple asking bot for every server ! (in Typescript ans Node)",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegomrno/AskBot-Discord.git"
+  },
+  "author": "Diego E. Moreno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegomrno/AskBot-Discord/issues"
+  },
+  "homepage": "https://github.com/diegomrno/AskBot-Discord#readme",
+  "dependencies": {
+    "@discordjs/rest": "^0.3.0",
+    "discord-api-types": "^0.31.1",
+    "discord.js": "^13.6.0"
+  }
+}
