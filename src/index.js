@@ -1,25 +1,120 @@
-const jsh = require("discordjsh"); //Require discordjsh
-const Discord = require("discord.js"); //Require discord.js
+
+const {
+    Client,
+    Intents,
+    MessageActionRow,
+    MessageButton,
+} = require('discord.js');//Require discord.js
 const config = require("../config/config.json"); //Get bot config
-const Modals = require("discord-modals"); //Import modal package
-
-//Create a discordjsh client
-const ClientBuilder = new jsh.Client({
-    token: config.token,
-    clientID: config.clientID,
-    testGuildID: "699167004099084348"
-})
-.setCommandsDir("./src/utility/commands") //Set commands directory
-.setContextDir("./src/utility/menus"); //Set context menus directory
-
+const { Message } = require("discord.js");
+const { v4 } = require("uuid");
+const { showModal, Modal, TextInputComponent, ModalSubmitInteraction } = require("discord-modals");
+const discordModals = require('discord-modals');
+const { MessageEmbed } = require('discord.js');
 //Create discord client
-const client = ClientBuilder.create({
+const client = new Client({
     intents: [
-        "GUILDS"
-    ],
-    //...
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+    ]
+})
+
+discordModals(client);
+
+
+client.on('interactionCreate', async (interaction) => {
+    if (interaction.isButton()) {
+        if (interaction.customId === 'EXECUTE_MODAL') {
+            const modal = new Modal() // We create a Modal
+                .setCustomId('modal')
+                .setTitle('Poser une question')
+                .addComponents([
+                    await new TextInputComponent()
+                        .setCustomId('title')
+                        .setLabel('Titre de votre question/problème')
+                        .setStyle('SHORT')
+                        .setMinLength(4)
+                        .setMaxLength(100)
+                        .setPlaceholder('ABCDEF')
+                        .setRequired(true),
+                    new TextInputComponent()
+                        .setCustomId('ask')
+                        .setLabel('Expliquez votre question/problème')
+                        .setStyle('LONG')
+                        .setMinLength(4)
+                        .setMaxLength(4000)
+                        .setPlaceholder('ABCDEF')
+                        .setRequired(true),
+                ]);
+
+            await showModal(modal, {
+                client,
+                interaction,
+            });
+
+        };
+
+    };
+
 });
 
-Modals(client);
+client.on('modalSubmit', async (modal) => {
+    const channel = client.channels.cache.find(channel => channel.name === 'ask')
+    if (modal.customId === 'modal') {
+        const ask = modal.getTextInputValue('ask');
+        const title = modal.getTextInputValue('title');
+        const SentAskMessage = await channel.send({
+            content: `**Une nouvelle question a été posée : **"${title}" **par**`,
+            fetchReply: true
+        });
+        const Embed = new MessageEmbed()
+            .setColor('#121215')
+            .setTitle(`${title}`)
+            .setURL('https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png')
+            .setAuthor({ name: modal.user.username, iconURL: modal.user.avatarURL(), url: 'https://discord.js.org' })
+            .setThumbnail('https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png')
+            .addField(`${modal.user.username} a une nouvelle question :`, ask , true)
+            .setTimestamp()
+            .setFooter({ text: 'AskBOT', iconURL: 'https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png' });
 
-//No need to do `client.login()`
+        const thread = await channel.threads.create({
+            name: `"${title}"`,
+            autoArchiveDuration: 1440,
+            reason: "f",
+        });
+        thread.send(`<@${modal.user.id}>**, voici votre thread ! Les helpers vous aiderons ; )**`)
+        thread.send({ embeds: [Embed] });
+        console.log(`[AskBOT]: New request : "${modal.user.username}" has been posted new topic about "${title}" in your ask channel`);
+    }
+    
+});
+
+client.on("ready", async () => {
+    const channel = client.channels.cache.find(channel => channel.name === 'help')
+    const CustomIds = {
+        MODAL: `DISCORD_MODAL` + v4(),
+        BUTTON: `EXECUTE_MODAL`
+    }
+    /**
+     * @type {Message}
+     */
+    const SentMessage = await channel.send({
+        content: `Posez *votre question ou exposez* votre problème **ici**, une équipe *vous répondra ultérieurement* !`,
+        components: [
+            {
+                type: 1,
+                components: [
+                    new MessageButton()
+                        .setCustomId(CustomIds.BUTTON)
+                        .setLabel(`Nouvelle question`)
+                        .setStyle("PRIMARY")
+                ]
+            }
+        ],
+        fetchReply: true
+    });
+})
+
+
+
+client.login(config.token);
