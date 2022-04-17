@@ -1,33 +1,25 @@
-const { Client, Intents, MessageActionRow, MessageButton } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const jsh = require("discordjsh"); //Require discordjsh
+const Discord = require("discord.js"); //Require discord.js
+const config = require("../config/config.json"); //Get bot config
+const Modals = require("discord-modals"); //Import modal package
 
-//Importing Rest & api-types
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v10');
+//Create a discordjsh client
+const ClientBuilder = new jsh.Client({
+    token: config.token,
+    clientID: config.clientID,
+    testGuildID: "699167004099084348"
+})
+.setCommandsDir("./src/utility/commands") //Set commands directory
+.setContextDir("./src/utility/menus"); //Set context menus directory
 
-//Loading Config
-const config = require('../config/config.json');
-console.log('Config Loaded');
-var owners = config.owners;
-
-client.on('ready', async () => {
-	console.log(`${client.user.tag} is Ready!`);
+//Create discord client
+const client = ClientBuilder.create({
+    intents: [
+        "GUILDS"
+    ],
+    //...
 });
 
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+Modals(client);
 
-	if (interaction.commandName === 'set') {
-		const row = new MessageActionRow()
-			.addComponents(
-				new MessageButton()
-					.setCustomId('primary')
-					.setLabel('')
-					.setStyle('PRIMARY'),
-			);
-
-		await interaction.reply({ content: '**Welcome to AskBOT !**', components: [row] });
-	}
-});
-
-client.login(config.token).catch(() => console.log('Invalid Token.Make Sure To Fill config.json'));
+//No need to do `client.login()`

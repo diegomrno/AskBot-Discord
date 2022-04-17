@@ -3,24 +3,6 @@
 	"status": "Bot Status to be Displayed",
 	"prefix": "your-prefix-here",
 	"owners": ["array", "of", "discord_id", "type-snowflake"],
-	"embed_content": {
-		"title": "Support Embed Title",
-		"color": "00000",
-		"thumbnail": false,
-		"thumbnail_url": "Url of A PNG/GIF",
-		"question_1": "Required",
-		"question_2": "Required",
-		"question_3": "Required",
-		"question_4": "Required",
-		"question_5": "Required"
-	},
-	"responses": {
-		"response_1": "Required",
-		"response_2": "Required",
-		"response_3": "Required",
-		"response_4": "Required",
-		"response_5": "Required"
-	},
 	"log_channel_id": "Discord Channel ID(type-snowflake)",
 	"assistance_channel_id": "Discord Channel ID(type-snowflake)",
 	"assistance_role_id": "RoleID",
