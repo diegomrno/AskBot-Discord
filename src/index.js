@@ -84,7 +84,9 @@ client.on('modalSubmit', async (modal) => {
         });
         thread.send(`<@${modal.user.id}>**, voici votre thread ! Les helpers vous aiderons ; )**`)
         thread.send({ embeds: [Embed] });
-        console.log(`[AskBOT]: New request : "${modal.user.username}" has been posted new topic about "${title}" in your ask channel`);
+        console.log(`[AskBOT]: New request : "${modal.user.username}" has been posted new ask about "${title}" in your ask channel`);
+        modal.deferReply();
+        modal.deleteReply();
     }
     
 });
