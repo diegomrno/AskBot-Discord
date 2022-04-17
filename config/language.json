@@ -1,4 +1,29 @@
 {
+    "en":{
+        "buttonname": "New Ask",
+        "modal":{
+            "title": "Ask a question",
+            "titleInput": {
+                "label": "Title of your question/problem",
+                "placeholder": "Your title"
+            },
+            "askInput": {
+                "label": "Explain your question/problem",
+                "placeholder": "Your problem"
+            }
+        },
+        "thread": {
+            "newAsk": " has a new question:",
+            "welcomeMessage": ", here is your thread! The helpers will help you; )"
+
+
+        },
+        "triggerButton": {
+            "message": "Ask *your question or expose* your problem **here**, a team *will answer you later*!",
+            "laber": "New ask"
+        }
+    },
+
     "fr":{
         "buttonname": "Nouvelle Question"
     }
