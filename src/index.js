@@ -1,4 +1,3 @@
-
 const {
     Client,
     Intents,
@@ -20,7 +19,6 @@ const client = new Client({
 })
 
 discordModals(client);
-
 
 client.on('interactionCreate', async (interaction) => {
     if (interaction.isButton()) {
@@ -73,7 +71,7 @@ client.on('modalSubmit', async (modal) => {
             .setURL('https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png')
             .setAuthor({ name: modal.user.username, iconURL: modal.user.avatarURL(), url: 'https://discord.js.org' })
             .setThumbnail('https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png')
-            .addField(`${modal.user.username} a une nouvelle question :`, ask , true)
+            .addField(`${modal.user.username} a une nouvelle question :`, ask, true)
             .setTimestamp()
             .setFooter({ text: 'AskBOT', iconURL: 'https://cdn.discordapp.com/attachments/706486471938408469/965351483304476682/Component_675.png' });
 
@@ -88,7 +86,7 @@ client.on('modalSubmit', async (modal) => {
         modal.deferReply();
         modal.deleteReply();
     }
-    
+
 });
 
 client.on("ready", async () => {
@@ -116,7 +114,5 @@ client.on("ready", async () => {
         fetchReply: true
     });
 })
-
-
 
 client.login(config.token);
